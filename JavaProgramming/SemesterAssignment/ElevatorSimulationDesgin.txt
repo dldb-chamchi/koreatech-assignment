@@ -1,0 +1,92 @@
+건물 클래스
+상태 :
+	건물 총 층수(maxFloor)
+	엘레베이터 목록(list<Elevator>)
+
+메소드 : 
+	엘레베이터 추가(addElevator)
+	어떤 엘레베이터로 사람을 태울지 계산(calcElevator)
+
+엘레베이터 클래스
+상태 : 
+	정격 하중(maxWeight)
+	현재 하중(currWeight)
+	현재 층(currFloor)
+	승객 목록(list<Passenger>)
+
+메소드 : 
+	
+	승객 태우기(loadPassenger) 
+	승객 내리기(getOffPassenger)
+	엘레베이터 이동(moveElevator)
+	승객 추가(add -> loadPassenger 메소드에 활용되는 private)
+	승객 내리기(remove -> getOffPassenger 메소드에 활용되는 private)
+
+승객 클래스
+상태 :
+	무게(weight)
+	현재 탄 층(loadFloor)
+	내릴 층(getOffFloor)
+	
+메소드 : 
+	승객이 엘레베이터를 부름(callElevator) ->  calcElevator 메소드 활용
+
+
+테스트 케이스 1
+승객이 callElveator()를 실행 (p.callElevator())
+calcElevator 메소드를 통해 어떤 엘레베이터가 승객을 태워야할지 계산
+ for (Elevator elevator : elevatorList)
+	승객의 getOffFloor와 현재 엘레베이터 위치(currFloor)를 비교 
+	mindistance = min(getOffFloor - currFloor, mindistance)
+-> 가장 가까운 엘베가 감(같을 경우 무조건 A(첫번째 엘베)가 가도록)
+-> elevA.loadPassenger(p) , moveElevator(Elevator elevA) -> 승객 태운 후 이동 -> elevA.getOffPassenger() -> 승객 내리기
+
+테스트 케이스 2
+테스트 케이스 1처럼 계산 후 A가 출발
+6층 승객을 태우는 것은 5층 승객을 태운(loadPassenger) A엘베가 적합(getOffFloor와 currFloor 비교) 
+-> 승객 태훈 후 getOffFloor에 한 명씩 내려줌(getOffPassenger)
+
+테스트 케이스 3
+테스트 케이스 1과 동일 
+
+테스트 케이스 4
+동시간대에 한 엘레베이터로 처리 못하는 사건이 일어났으므로 
+ for (Elevator elevator : elevatorList)
+적절한 엘레베이터를 calcElevator를 통해 2개 찾기
+loadpassenger() -> elevA.add(p)를 통해 태우고, moveElevator통해 이동, getOffPassenger() -> elevA.remove(p)를 통해 승객 내리기
+B또한 마찬가지
+
+테스트 케이스 5
+거리가 같지만 승객이 위로 올라가려할때는 낮은층에 있는 엘베, 아래로 갈때는 위층에 있는 엘베를 부르도록 함
+(calcElevator)
+if(mindistance = distance): 
+	 if((getOffFloor > loadFloor) and (getOfFloor - currFloor > 0)) //승객은 아래에서 위로, 엘베가 아래에 있다
+		엘베 선택
+	else if((getOffFloor < loadFloor) and (getOfFloor - currFloor < 0)) //승객은 위에서 아래, 엘베가 위에 있다
+
+테스트 케이스 6
+calcElevator에서 weight > maxWeight 이면 승객을 태우지 못하고 
+다른 적절한 엘레베이터를 콜하기
+->  for (Elevator elevator : elevatorList)
+
+테스트 케이스 7
+시간 0때 승객을 태우고 A를 5층으로 보내야 하나 같은 층에 위로 올라가는 또 다른 승객이 시간 1때 있음
+ for (Elevator elevator : elevatorList)
+	보낼 엘베 A를 찾고 loadPassenger()-> 승객 2명을 태운후 출발
+
+<예시 코드>
+Building building = new Building(10); //maxFloor 설정
+Elevator elevA = new Elevator(1000, 1); //최대 하중, 현재 층
+Elevator elevB = new Elevator(1000, 3);
+
+building.addElevator(elevA);
+building.addElevator(elevB);
+
+Passenger p1 = new Passenger(70, 1, 5); //무게, 타는 층, 갈 층
+    
+// 승객이 엘리베이터를 호출
+Elevator selectedElevator = building.calcElevator(p1); //반환된 최적의 엘레베이터(참조)
+    
+if (selectedElevator != null) {
+// 적합한 엘리베이터에 승객을 태움
+selectedElevator.loadPassenger(p1);
