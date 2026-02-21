@@ -1,0 +1,9 @@
+apt install snort
+su –l
+nano /etc/snort/rules/local.rules
+
+alert icmp any any -> any any (msg:"ICMP Ping Detected"; itype:8; sid:1000001; rev:1;)
+
+ping google.com
+
+snort –A console –c /etc/snort/snort.conf

@@ -1,0 +1,28 @@
+분석할 TCP 헤더 데이터: c0 a2 01 bb 34 6c 87 d4 ec b5 e3 53 50 18
+
+이 데이터를 TCP 헤더 구조에 맞추면 다음과 같다.
+
+Source Port (출발지 포트 / 2 bytes)
+    위치: 0x0022
+    실제 데이터: c0 a2
+    분석: 0xC0A2는 10진수로 49314
+
+Destination Port (목적지 포트 / 2 bytes)
+    위치: 0x0024
+    실제 데이터: 01 bb
+    분석: 0x01BB는 10진수로 443 (HTTPS)
+
+Sequence Number (4 bytes)
+    위치: 0x0026
+    실제 데이터: 34 6c 87 d4
+
+Acknowledgement Number (4 bytes)
+    위치: 0x002a
+    실제 데이터: ec b5 e3 53
+
+Header Length & Flags (2 bytes)
+    위치: 0x002e
+    실제 데이터: 50 18
+    분석:
+        50: 헤더 길이가 5 * 4 = 20바이트임을 의미한다.
+        0x18: PSH와 ACK (Acknowledgement) 플래그가 설정되었음을 의미한다.

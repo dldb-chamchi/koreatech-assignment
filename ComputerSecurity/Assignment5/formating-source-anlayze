@@ -1,0 +1,22 @@
+//%n format specifier in C 소스 분석
+
+#include <stdio.h>
+
+int main()
+{
+  int val;
+
+  printf("blah %n blah\n", &val);
+
+  printf("val = %d\n", val);
+
+  return 0;
+}
+
+/*
+소스를 분석해보자면 int val;로 int형 변수를 선언하고, printf 함수를 통해 %n을 활용하여 
+&val을 출력하는 것을 알 수 있다. 이는 %n이라는 지금까지 출력된 문자의 개수를 
+&val 주소에 써주는 방법을 활용한 것이다. 즉, &val 주소에는 지금까지 
+출력된 blah + 공백 5개를 저장했음을 예상할 수 있다. 다음 printf에서 
+val을 출력하면 val 주소에 저장된 5가 출력됨을 예상할 수 있다.
+*/

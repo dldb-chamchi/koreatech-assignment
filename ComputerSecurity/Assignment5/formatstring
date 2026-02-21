@@ -1,0 +1,13 @@
+//(1) format string 공격
+
+#include <stdio.h>
+#include <string.h>
+int target = 0xcafe;
+
+int main() {
+    printf("target: %d (address: %p)\n", target, &target); char buf[0x10] = {0, };
+    fgets(buf, 0x100, stdin);
+    printf(buf);
+    printf("\ntarget: %d\n", target);
+    return 0;
+}
